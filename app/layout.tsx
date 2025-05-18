@@ -33,7 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased grid grid-cols-[0.1fr_0.8fr] w-screen h-screen m-0 p-0 grid-flow-cols`}
       >
         <SideMenu/>
-        {children}
+        <main>{children}</main>
       </body>
     </html>
   );

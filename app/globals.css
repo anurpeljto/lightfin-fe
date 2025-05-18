@@ -6,10 +6,16 @@
 
   --primary: #758481;
   --secondary: #2D9783;
+  --third: #0F241F;
+  --warning: #E7C86D;
+  --canceled: #C14B49;
 }
 @theme {
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
+  --color-third: var(--third);
+  --color-pending: var(--warning);
+  --color-cancelled: var(--canceled);
 }
 
 /* @theme inline {
