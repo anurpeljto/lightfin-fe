@@ -44,14 +44,42 @@ export default function Home() {
       date: '2025-05-19',
     },
     {
-      id: 'TX12345',
+      id: 'TX12347',
       customer: 'John Doe',
       amount: 49.99,
       status: 'FISCALIZED',
       date: '2025-05-20',
     },
     {
-      id: 'TX12346',
+      id: 'TX12348',
+      customer: 'Jane Smith',
+      amount: 120.00,
+      status: 'PENDING',
+      date: '2025-05-19',
+    },
+    {
+      id: 'TX12349',
+      customer: 'John Doe',
+      amount: 49.99,
+      status: 'FISCALIZED',
+      date: '2025-05-20',
+    },
+    {
+      id: 'TX123410',
+      customer: 'Jane Smith',
+      amount: 120.00,
+      status: 'PENDING',
+      date: '2025-05-19',
+    },
+    {
+      id: 'TX123411',
+      customer: 'John Doe',
+      amount: 49.99,
+      status: 'FISCALIZED',
+      date: '2025-05-20',
+    },
+    {
+      id: 'TX123412',
       customer: 'Jane Smith',
       amount: 120.00,
       status: 'PENDING',
@@ -161,34 +189,36 @@ export default function Home() {
         
         <div className="col-span-3 w-full h-full flex flex-col p-4 bg-white rounded-lg border-1 border-gray-200">
           <p className="p-0 pb-3 m-0 text-lg text-primary font-bold">Latest issued receipts</p>
-          <table className="min-w-full text-sm text-left text-gray-700">
-            <thead className="bg-gray-100 text-xs uppercase text-gray-600">
-              <tr>
-                <th className="px-4 py-2">ID</th>
-                <th className="px-4 py-2">Customer</th>
-                <th className="px-4 py-2">Amount</th>
-                <th className="px-4 py-2">Status</th>
-                <th className="px-4 py-2">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {latestTransactions.map(tx => (
-                <tr key={tx.id} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-2 font-medium text-gray-800">{tx.id}</td>
-                  <td className="px-4 py-2">{tx.customer}</td>
-                  <td className="px-4 py-2">${tx.amount.toFixed(2)}</td>
-                  <td className={`px-4 py-2 font-semibold ${
-                    tx.status === 'FISCALIZED' ? 'text-green-600' :
-                    tx.status === 'PENDING' ? 'text-yellow-600' :
-                    'text-red-600'
-                  }`}>
-                    {tx.status}
-                  </td>
-                  <td className="px-4 py-2">{tx.date}</td>
+          <div className="max-h-[150px] overflow-y-scroll">
+            <table className="min-w-full text-sm text-left text-gray-700">
+              <thead className="bg-gray-100 text-xs uppercase text-gray-600">
+                <tr>
+                  <th className="px-4 py-2">ID</th>
+                  <th className="px-4 py-2">Customer</th>
+                  <th className="px-4 py-2">Amount</th>
+                  <th className="px-4 py-2">Status</th>
+                  <th className="px-4 py-2">Date</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {latestTransactions.map(tx => (
+                  <tr key={tx.id} className="border-b hover:bg-gray-50">
+                    <td className="px-4 py-2 font-medium text-gray-800">{tx.id}</td>
+                    <td className="px-4 py-2">{tx.customer}</td>
+                    <td className="px-4 py-2">${tx.amount.toFixed(2)}</td>
+                    <td className={`px-4 py-2 font-semibold ${
+                      tx.status === 'FISCALIZED' ? 'text-green-600' :
+                      tx.status === 'PENDING' ? 'text-yellow-600' :
+                      'text-red-600'
+                    }`}>
+                      {tx.status}
+                    </td>
+                    <td className="px-4 py-2">{tx.date}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
