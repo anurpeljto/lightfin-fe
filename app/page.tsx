@@ -94,10 +94,10 @@ export default function Home() {
   };
 
   return (
-    <div className="w-full h-full grid grid-rows-[0.15fr_0.85fr] sm:p-10 py-10 px-4">
+    <div className="w-full h-full grid grid-rows-[0.15fr_0.85fr] py-10 px-4 sm:p-10 sm:mx-0">
       <h1 className="text-4xl font-bold text-primary sm:p-0 pb-4 m-0">Dashboard</h1>
 
-      <div className="w-full h-full sm:grid sm:grid-cols-3 flex flex-col gap-10 lg:gap-24 sm:gap-20 sm:max-h-[200px]">
+      <div className="w-full h-full lg:grid lg:grid-cols-3 flex flex-col gap-10 lg:gap-24 sm:gap-20 sm:max-h-[200px]">
         <div className="flex flex-col gap-1 bg-white p-4 rounded-lg border-1 border-gray-200">
           <div className="flex flex-row gap-1 items-center">
             <div className="h-[10px] w-[10px] rounded-full bg-secondary"></div>
@@ -141,11 +141,11 @@ export default function Home() {
         </div>
 
         <div className="col-span-2 hidden sm:flex items-center justify-between w-full">
-          <div className="min-w-[250px] min-h-[300px] w-full bg-white p-4 bg-white p-4 rounded-lg border-1 border-gray-200">
+          <div className="md:min-w-[250px] min-h-[300px] w-full bg-white p-4 bg-white p-4 rounded-lg border-1 border-gray-200">
             <p className="p-0 pb-3 m-0 text-lg text-primary font-bold">Today's transcations</p>
             <ResponsiveBar
               data={data}
-              margin={{bottom: 70, left: -100}}
+              margin={{bottom: 70, left: -50}}
               keys={['count']}
               indexBy="status"
               padding={0.3}
@@ -170,21 +170,23 @@ export default function Home() {
             />
           </div>
         </div>
-        <div className="hidden sm:block col-span-1 min-w-[250px] min-h-[300px] w-full bg-white p-4 rounded-lg bg-white border-1 border-gray-200">
+        <div className="hidden sm:block col-span-1 lg:min-w-[250px] min-h-[300px] w-full bg-white p-4 rounded-lg bg-white border-1 border-gray-200">
             <p className="p-0 pb-3 m-0 text-lg text-primary font-bold">Weekly payments by type</p>
+            <div className="h-[200px] w-full">
             <ResponsivePie
-                data={pieData}
-                margin={{ bottom: 50, top: 10, left: 5 }}
-                padAngle={0.6}
-                cornerRadius={2}
-                activeOuterRadiusOffset={8}
-                arcLinkLabelsSkipAngle={10}
-                arcLinkLabelsTextColor="#333333"
-                arcLinkLabelsThickness={2}
-                arcLinkLabelsColor={{ from: 'color' }}
-                arcLabelsSkipAngle={10}
-                arcLabelsTextColor={{ from: 'color', modifiers: [['darker', 2]] }}
-            />              
+              data={pieData}
+              margin={{ top: 10, right: 10, bottom: 40, left: 10 }}
+              padAngle={0.6}
+              cornerRadius={2}
+              activeOuterRadiusOffset={8}
+              arcLinkLabelsSkipAngle={10}
+              arcLinkLabelsTextColor="#333"
+              arcLinkLabelsThickness={2}
+              arcLinkLabelsColor={{ from: 'color' }}
+              arcLabelsSkipAngle={10}
+              arcLabelsTextColor={{ from: 'color', modifiers: [['darker', 2]] }}
+            />
+          </div>       
         </div>
         
         <div className="col-span-3 sm:w-full h-full flex flex-col p-4 bg-white rounded-lg border-1 border-gray-200">
@@ -192,7 +194,7 @@ export default function Home() {
 
           {/* desktop */}
           <div className="hidden sm:block max-h-[150px] overflow-y-scroll">
-            <table className="min-w-full text-sm text-left text-gray-700">
+            <table className="md:min-w-full text-sm text-left text-gray-700">
               <thead className="bg-gray-100 text-xs uppercase text-gray-600">
                 <tr>
                   <th className="px-4 py-2">ID</th>
