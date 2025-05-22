@@ -33,10 +33,10 @@ const page = () => {
   }
 
   return (
-    <div className="w-full h-full grid grid-rows-[0.15fr_0.85fr] p-10">
+    <div className="w-full h-full grid grid-rows-[0.15fr_0.85fr] md:p-10 p-4">
         <nav className="text-4xl font-bold text-primary p-0 m-0 flex items-center gap-4 pb-10">
           <ArrowBack/>
-          <p>first_name_fetched last_name_fetched - Loans</p>
+          <p>Anur Peljto - Loans</p>
         </nav>
         
         <div className="w-full h-full sm:grid sm:grid-cols-3 flex flex-col gap-10 lg:gap-24 sm:gap-20 max-h-[200px]">

@@ -1,5 +1,6 @@
 import { Column } from '@/app/interfaces/column.interface'
 import React from 'react'
+import LinkButton from '../buttons/LinkButton';
 
 interface ReportTableProps {
     columns: Column[];
@@ -10,7 +11,7 @@ const ReportTable = (props: ReportTableProps) => {
   const {columns, columnData} = props;
   return (
     <div className='min-w-full min-h-full'>
-        <table className="min-w-full text-sm text-left text-gray-700">
+        <table className="hidden sm:table min-w-full text-sm text-left text-gray-700">
             <thead className="bg-gray-100 text-xs uppercase text-gray-600">
                 <tr>
                 {
@@ -39,6 +40,36 @@ const ReportTable = (props: ReportTableProps) => {
                 ))}
             </tbody>
         </table>
+
+        <div className="sm:hidden block w-full space-y-4 text-sm">
+        {columnData.map((row: any, index: number) => (
+            <div
+            key={index}
+            className="border p-4 rounded-lg shadow-sm bg-gray-50 space-y-2 w-full"
+            >
+            {columns.map((col: Column) => (
+                <div
+                key={col.columnDef}
+                className="flex justify-between gap-4 items-start"
+                >
+                <span className="font-semibold whitespace-nowrap">{col.header}:</span>
+                {col.columnDef === 'actions' ? (
+                    <div className="flex gap-2 flex-wrap justify-end">
+                    <button className="text-blue-600 hover:underline">
+                        Generate report
+                    </button>
+                    <button className="text-red-600 hover:underline">Delete</button>
+                    </div>
+                ) : (
+                    <span className="text-right break-all">
+                    {String(row[col.columnDef])}
+                    </span>
+                )}
+                </div>
+            ))}
+            </div>
+        ))}
+        </div>
     </div>
   )
 }
