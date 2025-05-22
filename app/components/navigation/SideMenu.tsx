@@ -21,10 +21,10 @@ const SideMenu = () => {
                 <FontAwesomeIcon icon={faUser} size='xl'/> 
                 <p className='text-sm'>Users</p>
             </Link>
-            <div className='flex flex-col gap-1 items-center cursor-pointer'>
+            <Link href="/subsidies" className='flex flex-col gap-1 items-center cursor-pointer'>
                 <FontAwesomeIcon icon={faMoneyBillAlt} size='xl'/> 
                 <p className='text-sm'>Subsidies</p>
-            </div>
+            </Link>
             <div className='flex flex-col gap-1 items-center cursor-pointer'>
                 <FontAwesomeIcon icon={faFileAlt} size='xl'/> 
                 <p className='text-sm'>Receipts</p>

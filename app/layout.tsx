@@ -33,7 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased grid grid-cols-[0.1fr_0.9fr] w-screen h-screen m-0 p-0 grid-flow-cols bg-[#F8F9FA]`}
       >
         <SideMenu/>
-        <main className="overflow-y-scroll mb-10">{children}</main>
+        <main className="overflow-y-scroll mb-10 w-full">{children}</main>
       </body>
     </html>
   );

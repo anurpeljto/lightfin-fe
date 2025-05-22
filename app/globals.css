@@ -18,6 +18,10 @@
   --color-cancelled: var(--canceled);
 }
 
+.item-wrapper {
+  @apply gap-1 bg-white p-4 rounded-lg border border-gray-200;
+}
+
 /* @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

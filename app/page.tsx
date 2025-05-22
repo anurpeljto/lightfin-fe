@@ -94,10 +94,10 @@ export default function Home() {
   };
 
   return (
-    <div className="w-full h-full grid grid-rows-[0.15fr_0.85fr] p-10">
-      <h1 className="text-4xl font-bold text-primary p-0 m-0">Dashboard</h1>
+    <div className="w-full h-full grid grid-rows-[0.15fr_0.85fr] sm:p-10 py-10 px-4">
+      <h1 className="text-4xl font-bold text-primary sm:p-0 pb-4 m-0">Dashboard</h1>
 
-      <div className="w-full h-full sm:grid sm:grid-cols-3 flex flex-col gap-10 lg:gap-24 sm:gap-20 max-h-[200px]">
+      <div className="w-full h-full sm:grid sm:grid-cols-3 flex flex-col gap-10 lg:gap-24 sm:gap-20 sm:max-h-[200px]">
         <div className="flex flex-col gap-1 bg-white p-4 rounded-lg border-1 border-gray-200">
           <div className="flex flex-row gap-1 items-center">
             <div className="h-[10px] w-[10px] rounded-full bg-secondary"></div>
@@ -187,9 +187,11 @@ export default function Home() {
             />              
         </div>
         
-        <div className="col-span-3 w-full h-full flex flex-col p-4 bg-white rounded-lg border-1 border-gray-200">
+        <div className="col-span-3 sm:w-full h-full flex flex-col p-4 bg-white rounded-lg border-1 border-gray-200">
           <p className="p-0 pb-3 m-0 text-lg text-primary font-bold">Latest issued receipts</p>
-          <div className="max-h-[150px] overflow-y-scroll">
+
+          {/* desktop */}
+          <div className="hidden sm:block max-h-[150px] overflow-y-scroll">
             <table className="min-w-full text-sm text-left text-gray-700">
               <thead className="bg-gray-100 text-xs uppercase text-gray-600">
                 <tr>
@@ -218,6 +220,25 @@ export default function Home() {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* mobile */}
+          <div className="block sm:hidden space-y-4 overflow-y-scroll text-sm max-h-[150px]">
+            {latestTransactions.map(tx => (
+              <div key={tx.id} className="border p-3 rounded-lg shadow-sm bg-gray-50 border-b-2 border-gray-150">
+                <p><span className="font-semibold">ID:</span> {tx.id}</p>
+                <p><span className="font-semibold">Customer:</span> {tx.customer}</p>
+                <p><span className="font-semibold">Amount:</span> ${tx.amount.toFixed(2)}</p>
+                <p className={`font-semibold ${
+                  tx.status === 'FISCALIZED' ? 'text-green-600' :
+                  tx.status === 'PENDING' ? 'text-yellow-600' :
+                  'text-red-600'
+                }`}>
+                  Status: {tx.status}
+                </p>
+                <p><span className="font-semibold">Date:</span> {tx.date}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
