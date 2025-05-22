@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faFileAlt, faMoneyBillAlt, faUser} from "@fortawesome/free-regular-svg-icons";
 import { faCoins, faDonate, faHandHolding, faHandHoldingDollar, faPiggyBank, faReceipt } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const SideMenu = () => {
   return (
@@ -36,7 +37,7 @@ const SideMenu = () => {
         </nav>
         
         <div className='p-4 flex justify-center w-full'>
-            <div className='h-[40px] w-[40px] rounded-full bg-black'></div>
+            <Image src="/avatar.jpg" height={50} width={50} className='h-[50px] w-[50px] rounded-full border-1 object-cover' alt='User avatar'></Image>
         </div>
     </div>
   )
