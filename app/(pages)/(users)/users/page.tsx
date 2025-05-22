@@ -38,9 +38,9 @@ const page = () => {
                             <td className="px-4 py-2">{user.role}</td>
                             <td className="px-4 py-2">
                                 <div className='flex w-full gap-2'>
-                                    <button>Loans</button>
+                                    <Link href={`/user-loans/${user.id}`}>Loans</Link>
                                     <Link href={`/user-debts/${user.id}`}>Debts</Link>
-                                    <button>Subsidies</button>
+                                    <Link href={`/user-subsidies/${user.id}`}>Subsidies</Link>
                                 </div>
                             </td>
                         </tr>
