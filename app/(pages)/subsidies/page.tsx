@@ -49,7 +49,7 @@ const page = () => {
                 </div>
                 </div>
 
-                <div className='flex flex-col gap-2'>
+                <div className='flex flex-col gap-2 item-wrapper'>
                     <h2 className='text-xl font-bold'>All subsidies</h2>
                     <ReportTable columns={columns} columnData={columnData}/>
                 </div>
