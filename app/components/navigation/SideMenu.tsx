@@ -26,19 +26,19 @@ const SideMenu = () => {
                 <FontAwesomeIcon icon={faMoneyBillAlt} size='xl'/> 
                 <p className='text-sm'>Subsidies</p>
             </Link>
-            <div className='flex flex-col gap-1 items-center cursor-pointer'>
+            <Link href="/receipts" className='flex flex-col gap-1 items-center cursor-pointer'>
                 <FontAwesomeIcon icon={faFileAlt} size='xl'/> 
                 <p className='text-sm'>Receipts</p>
-            </div>
-            <div className='flex flex-col gap-1 items-center cursor-pointer'>
+            </Link>
+            <Link href="/loans" className='flex flex-col gap-1 items-center cursor-pointer'>
                 <FontAwesomeIcon icon={faCoins} size='xl'/> 
                 <p className='text-sm'>Loans</p>
-            </div>
+            </Link>
         </nav>
         
-        <div className='p-4 flex justify-center w-full'>
+        <Link href="/profile" className='p-4 flex justify-center w-full'>
             <Image src="/avatar.jpg" height={50} width={50} className='h-[50px] w-[50px] rounded-full border-1 object-cover' alt='User avatar'></Image>
-        </div>
+        </Link>
     </div>
   )
 }
