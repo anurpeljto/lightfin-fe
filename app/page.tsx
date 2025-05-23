@@ -2,15 +2,69 @@
 import { Bar, ResponsiveBar } from "@nivo/bar";
 import { ResponsivePie } from "@nivo/pie";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import CountUp from "react-countup";
 
 export default function Home() {
+
+  const [fiscalizedWeeklyData, setFiscalizedWeeklyData] = useState(0);
+  const [fiscalizedWeeklyDataLoading, setFiscalizedWeeklyDataLoading] = useState(true);
 
   const data = [
     { status: 'PENDING', count: 20 },
     { status: 'CANCELLED', count: 15 },
     { status: 'FISCALIZED', count: 65 },
   ];
+
+  const query = `
+    query {
+      getFiscalizedThisWeek{
+          data {
+              id,
+              total,
+              items {
+                  id,
+                  name,
+                  unitPrice,
+                  quantity,
+                  totalPrice
+              },
+              fiscalCode,
+              signature,
+              timestamp,
+              status,
+              paymentType,
+              taxAmount
+          },
+          count
+      }
+  }`
+
+  useEffect(() => {
+    async function fetchData(){
+      setFiscalizedWeeklyDataLoading(true);
+      try{
+        const res = await fetch("http://localhost:8080/graphql", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({query})
+        });
+
+        const json = await res.json();
+        if(json.data?.getFiscalizedThisWeek){
+          setFiscalizedWeeklyData(json.data.getFiscalizedThisWeek.count);
+        }
+      } catch(error){
+        console.error('Error!!!, ', error)
+      }finally {
+        setFiscalizedWeeklyDataLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   const pieData = [
     {
@@ -106,7 +160,7 @@ export default function Home() {
           <CountUp
             className="text-3xl font-[900] text-secondary"
             start={0}
-            end={2002}
+            end={fiscalizedWeeklyData}
             duration={1.5}
             decimals={0}
           />
