@@ -4,6 +4,9 @@ import "./globals.css";
 import SideMenu from "./components/navigation/SideMenu";
 import "@fortawesome/fontawesome-svg-core/styles.css"
 import {config} from "@fortawesome/fontawesome-svg-core";
+import { ApolloProvider } from "@apollo/client";
+import { client } from "./lib/apollo-client";
+import ApolloWrapper from "./lib/ApolloWrapper";
 
 config.autoAddCss = false;
 
@@ -34,7 +37,7 @@ export default function RootLayout({
       >
         <SideMenu/>
         <main className="overflow-x-hidden overflow-y-auto w-full h-full p-0 m-0">
-          {children}
+          <ApolloWrapper>{children}</ApolloWrapper>
         </main>          
       </body>
     </html>

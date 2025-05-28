@@ -5,8 +5,9 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import CountUp from "react-countup";
 import { QueryClient } from "./utils/QueryClient";
-import { cancelledThisWeekQuery, fiscalizedThisWeekQuery, pendingThisWeekQuery, todayTransactionsQuery, weeklyByTypeQuery } from "./constants/queries/queries";
+import { cancelledThisWeekQuery, fiscalizedThisWeekQuery, GET_LATEST_RECEIPTS, pendingThisWeekQuery, todayTransactionsQuery, weeklyByTypeQuery } from "./constants/queries/queries";
 import LoaderSpinner from "./components/loading/LoaderSpinner";
+import { useQuery } from "@apollo/client";
 
 export default function Home() {
   const [fiscalizedWeeklyData, setFiscalizedWeeklyData] = useState(0);
@@ -23,6 +24,12 @@ export default function Home() {
 
   const [weeklyByTypeData, setWeeklyByTypeData] = useState([]);
   const [weeklyByTypeDataLoading, setWeeklyByTypeDataLoading] = useState(true);
+
+  const {data, loading, error} = useQuery(GET_LATEST_RECEIPTS, {
+    pollInterval: 5000
+  });
+
+  console.log(data);
 
   const query = new QueryClient();
 
@@ -285,27 +292,27 @@ export default function Home() {
             <table className="md:min-w-full text-sm text-left text-gray-700">
               <thead className="bg-gray-100 text-xs uppercase text-gray-600">
                 <tr>
-                  <th className="px-4 py-2">ID</th>
-                  <th className="px-4 py-2">Customer</th>
+                  <th className="px-4 py-2">Fiscal code</th>
                   <th className="px-4 py-2">Amount</th>
+                  <th className="px-4 py-2">Tax amount</th>
                   <th className="px-4 py-2">Status</th>
                   <th className="px-4 py-2">Date</th>
                 </tr>
               </thead>
               <tbody>
-                {latestTransactions.map(tx => (
-                  <tr key={tx.id} className="border-b hover:bg-gray-50">
-                    <td className="px-4 py-2 font-medium text-gray-800">{tx.id}</td>
-                    <td className="px-4 py-2">{tx.customer}</td>
-                    <td className="px-4 py-2">${tx.amount.toFixed(2)}</td>
+                {data.getLatestReceipts.map((receipt: any) => (
+                  <tr key={receipt.id} className="border-b hover:bg-gray-50">
+                    <td className="px-4 py-2">{receipt.fiscalCode}</td>
+                    <td className="px-4 py-2">${receipt.total.toFixed(2)}</td>
+                    <td className="px-4 py-2">${receipt.taxAmount.toFixed(2)}</td>
                     <td className={`px-4 py-2 font-semibold ${
-                      tx.status === 'FISCALIZED' ? 'text-green-600' :
-                      tx.status === 'PENDING' ? 'text-yellow-600' :
+                      receipt.status === 'FISCALIZED' ? 'text-green-600' :
+                      receipt.status === 'PENDING' ? 'text-yellow-600' :
                       'text-red-600'
                     }`}>
-                      {tx.status}
+                      {receipt.status}
                     </td>
-                    <td className="px-4 py-2">{tx.date}</td>
+                    <td className="px-4 py-2">{new Date(receipt.timestamp).toLocaleString('sr-Latn')}</td>
                   </tr>
                 ))}
               </tbody>

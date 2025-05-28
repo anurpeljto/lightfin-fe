@@ -1,3 +1,5 @@
+import { gql } from "@apollo/client"
+
 export const fiscalizedThisWeekQuery = `
                         query {
                         getFiscalizedThisWeek{
@@ -89,3 +91,26 @@ export const weeklyByTypeQuery = `{
         }
     }
 }`
+
+export const GET_LATEST_RECEIPTS = gql`
+    query getLatestReceipts{
+        getLatestReceipts{
+            id,
+            total,
+            timestamp,
+            items {
+                id,
+                name,
+                unitPrice,
+                quantity,
+                totalPrice
+            },
+            fiscalCode,
+            signature,
+            timestamp,
+            status,
+            paymentType,
+            taxAmount
+        }
+    }
+`
