@@ -22,7 +22,7 @@ export class QueryClient {
             const response = await request.json();
             return response;
         } catch (error: any) {
-            throw new Error('Error while querying: ', error);
+            throw new Error('Error while querying: ', error.message);
         }
     }
 }

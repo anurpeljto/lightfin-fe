@@ -114,3 +114,16 @@ export const GET_LATEST_RECEIPTS = gql`
         }
     }
 `
+
+export const GET_LOANS_BY_BORROWER = gql `
+    query GetLoansByUserId($id: ID!, $page: Int, $size: Int){
+        getLoansByUserId(id: $id, page: $page, size: $size) {
+            data{
+                id,
+                borrowerId,
+                status,
+                amount,
+                interestRate
+            }}
+        }
+`

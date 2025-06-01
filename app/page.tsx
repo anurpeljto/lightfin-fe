@@ -29,7 +29,6 @@ export default function Home() {
     pollInterval: 5000
   });
 
-  console.log(data);
 
   const query = new QueryClient();
 
@@ -114,66 +113,6 @@ export default function Home() {
   useEffect(() => {
     fetchData()
   }, []);
-
-
-  const latestTransactions = [
-    {
-      id: 'TX12345',
-      customer: 'John Doe',
-      amount: 49.99,
-      status: 'FISCALIZED',
-      date: '2025-05-20',
-    },
-    {
-      id: 'TX12346',
-      customer: 'Jane Smith',
-      amount: 120.00,
-      status: 'PENDING',
-      date: '2025-05-19',
-    },
-    {
-      id: 'TX12347',
-      customer: 'John Doe',
-      amount: 49.99,
-      status: 'FISCALIZED',
-      date: '2025-05-20',
-    },
-    {
-      id: 'TX12348',
-      customer: 'Jane Smith',
-      amount: 120.00,
-      status: 'PENDING',
-      date: '2025-05-19',
-    },
-    {
-      id: 'TX12349',
-      customer: 'John Doe',
-      amount: 49.99,
-      status: 'FISCALIZED',
-      date: '2025-05-20',
-    },
-    {
-      id: 'TX123410',
-      customer: 'Jane Smith',
-      amount: 120.00,
-      status: 'PENDING',
-      date: '2025-05-19',
-    },
-    {
-      id: 'TX123411',
-      customer: 'John Doe',
-      amount: 49.99,
-      status: 'FISCALIZED',
-      date: '2025-05-20',
-    },
-    {
-      id: 'TX123412',
-      customer: 'Jane Smith',
-      amount: 120.00,
-      status: 'PENDING',
-      date: '2025-05-19',
-    }
-  ];
 
   const customColors = {
     PENDING: '#E7C86D',    
@@ -321,11 +260,11 @@ export default function Home() {
 
           {/* mobile */}
           <div className="block sm:hidden space-y-4 overflow-y-scroll text-sm max-h-[150px]">
-            {latestTransactions.map(tx => (
+            {data.getLatestReceipts.map((tx: any) => (
               <div key={tx.id} className="border p-3 rounded-lg shadow-sm bg-gray-50 border-b-2 border-gray-150">
-                <p><span className="font-semibold">ID:</span> {tx.id}</p>
-                <p><span className="font-semibold">Customer:</span> {tx.customer}</p>
-                <p><span className="font-semibold">Amount:</span> ${tx.amount.toFixed(2)}</p>
+                <p><span className="font-semibold">Fiscal code:</span> {tx.fiscalCode}</p>
+                <p><span className="font-semibold">Tax amount:</span> {tx.taxAmount.toFixed(2)}</p>
+                <p><span className="font-semibold">Total:</span> ${tx.total.toFixed(2)}</p>
                 <p className={`font-semibold ${
                   tx.status === 'FISCALIZED' ? 'text-green-600' :
                   tx.status === 'PENDING' ? 'text-yellow-600' :
