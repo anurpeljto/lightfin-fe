@@ -127,3 +127,24 @@ export const GET_LOANS_BY_BORROWER = gql `
             }}
         }
 `
+
+export const GET_USER_BY_ID = gql `
+    query GetUserById($id: Int!){
+        getUserById(id: $id){
+            id,
+            first_name,
+            last_name,
+            email
+        }
+    }`
+
+export const GET_USERS = gql `
+    query ListUsers($page: Int, $size: Int){
+        listUsers(page: $page, size: $size){
+            id,
+            first_name,
+            last_name,
+            email
+        }
+    }
+`

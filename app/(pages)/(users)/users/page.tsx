@@ -1,45 +1,24 @@
+'use client'
+
 import LinkButton from '@/app/components/buttons/LinkButton'
+import LoaderSpinner from '@/app/components/loading/LoaderSpinner'
+import NoData from '@/app/components/navigation/NoData'
+import { GET_USERS } from '@/app/constants/queries/queries'
+import { useQuery } from '@apollo/client'
 import Link from 'next/link'
 import React from 'react'
 
 const page = () => {
-    const users = [
-        {
-            id: 1,
-            name: 'test',
-            last_name: 'lastname',
-            email: 'testmail@test.com',
-            role: 'client'
-        },
-        {
-            id: 2,
-            name: 'test',
-            last_name: 'lastname',
-            email: 'testmail@test.com',
-            role: 'client'
-        },
-        {
-            id: 3,
-            name: 'test',
-            last_name: 'lastname',
-            email: 'testmail@test.com',
-            role: 'client'
-        },
-        {
-            id: 4,
-            name: 'test',
-            last_name: 'lastname',
-            email: 'testmail@test.com',
-            role: 'client'
-        },
-        {
-            id: 5,
-            name: 'test',
-            last_name: 'lastname',
-            email: 'testmail@test.com',
-            role: 'client'
-        }
-    ]
+    const {data, loading, error} = useQuery(GET_USERS, {
+        variables: {page: 0}
+    });
+
+    if(loading){
+        return <LoaderSpinner/>
+    }
+
+    const users = data.listUsers;
+
   return (
     <div className="w-full h-full grid grid-rows-[0.15fr_0.85fr] md:p-10 p-4">
         <h1 className="text-4xl font-bold text-primary sm:p-0 py-6 m-0">Users</h1>
@@ -58,17 +37,16 @@ const page = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map(user => (
+                        {users.map((user: any) => (
                         <tr key={user.id} className="border-b hover:bg-gray-50">
                             <td className="px-4 py-2 font-medium text-gray-800">{user.id}</td>
-                            <td className="px-4 py-2">{user.name}</td>
+                            <td className="px-4 py-2">{user.first_name}</td>
                             <td className="px-4 py-2">{user.last_name}</td>
                             <td className="px-4 py-2">{user.email}</td>
                             <td className="px-4 py-2">{user.role}</td>
                             <td className="px-4 py-2">
                                 <div className='flex w-full gap-2'>
                                 <LinkButton href={`/user-loans/${user.id}`} style={'border-red-300'} text='Loans'/>
-                                <LinkButton href={`/user-debts/${user.id}`} style={'border-green-300'} text='Debts'/>
                                 <LinkButton href={`/user-subsidies/${user.id}`} style={'border-yellow-300'} text='Subsidies'/>
                                 </div>
                             </td>
@@ -79,7 +57,7 @@ const page = () => {
             </div>
 
             <div className="block sm:hidden space-y-4 overflow-y-scroll text-sm m-0">
-            {users.map(user => (
+            {users.map((user: any) => (
               <div key={user.id} className="border p-2 rounded-lg shadow-sm bg-gray-50 border-b-2 border-gray-150 flex flex-col gap-2">
                 <div className='flex flex-col'>
                     <p><span className="font-semibold">ID:</span> {user.id}</p>
@@ -90,7 +68,6 @@ const page = () => {
                 </div>
                 <div className='flex w-full items-center justify-between gap-1'>
                     <LinkButton href={`/user-loans/${user.id}`} style={'border-canceled'} text='Loans'/>
-                    <LinkButton href={`/user-debts/${user.id}`} style={'border-warning'} text='Debts'/>
                     <LinkButton href={`/user-subsidies/${user.id}`} style={'border-secondary'} text='Subsidies'/>
                 </div>
               </div>

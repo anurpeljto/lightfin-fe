@@ -1,9 +1,10 @@
 'use client';
 import LoaderSpinner from '@/app/components/loading/LoaderSpinner';
 import ArrowBack from '@/app/components/navigation/ArrowBack';
+import NoData from '@/app/components/navigation/NoData';
 import ReportTable from '@/app/components/reports/ReportTable';
 import ReportPage from '@/app/components/reports/ReportTable'
-import { GET_LOANS_BY_BORROWER } from '@/app/constants/queries/queries';
+import { GET_LOANS_BY_BORROWER, GET_USER_BY_ID } from '@/app/constants/queries/queries';
 import { Column } from '@/app/interfaces/column.interface';
 import { ApolloClient, useQuery } from '@apollo/client';
 import Image from 'next/image';
@@ -24,24 +25,36 @@ const page = () => {
     { columnDef: 'actions', header: 'actions' }
   ];
 
+  const generateReport = async() => {
+    const file = await fetch(`${process.env.NEXT_PUBLIC_REST_URL}/api/reports/user-loans/${id}/report?first_name=${user.first_name}&last_name=${user.last_name}&email=${user.email}`).then(
+      response => {
+        if(!response.ok) throw new Error("Network response was not ok");
+          return response.blob();
+      }
+    ).then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `loan_report_${user.first_name}_${user.last_name}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    })
+  }
+
   const {data, loading, error} = useQuery(GET_LOANS_BY_BORROWER, {
     variables: {id: id}
   });
   const loanData = data && data.getLoansByUserId.data;
 
-  const columnData: any = {
-    data: [
-      {
-        id: 2,
-        borrower_id: id,
-        amount: 10000,
-        loan_status: 'PENDING',
-        interest_rate: 0.3,
-      }
-    ]
-  }
+  const fetchUser = useQuery(GET_USER_BY_ID, {
+    variables: {id: Number(id)}
+  });
 
-  if(loading){
+  const user = fetchUser?.data?.getUserById;
+
+  if(loading || fetchUser.loading){
     return (
       <LoaderSpinner/>
     )
@@ -50,26 +63,18 @@ const page = () => {
   if (error) return <p>Error loading loans: {error.message}</p>;
 
   if(loanData.length == 0){
-    return (
-      <div className="w-full h-full grid grid-rows-[0.15fr_0.85fr] md:p-10 p-4">
-        <nav className="text-4xl font-bold text-primary p-0 m-0 flex items-center gap-4 pb-10">
-          <ArrowBack/>
-        </nav>
-        <div className='flex flex-col items-center justify-center gap-2'>
-          <Image src="/no-data.svg" height={100} width={100} alt='No data found' className='w-full h-full max-h-[350px]'/>
-          <h2 className='sm:text-4xl text-2xl font-bold text-cancelled'>No data found for this user</h2>
-        </div>
-      </div>
-    )
+    return <NoData/>
   }
 
   return (
-    <div className="w-full h-full grid grid-rows-[0.15fr_0.85fr] md:p-10 p-4">
+    <div className="w-full h-full grid grid-rows-[0.15fr_0.05fr_0.90fr] md:p-10 p-4">
         <nav className="text-4xl font-bold text-primary p-0 m-0 flex items-center gap-4 pb-10">
           <ArrowBack/>
-          <p>Anur Peljto - Loans</p>
+          <p>{user.first_name} {user.last_name} - Loans</p>
         </nav>
-        
+        <div className='flex items-center justify-center p-4 rounded-lg bg-altpurple max-w-[200px] mb-2 max-height-[50px]' onClick={generateReport}>
+          <h2 className='text-lg font-bold text-white'>Generate report</h2>
+        </div>
         <div className="w-full h-full sm:grid sm:grid-cols-3 flex flex-col gap-10 lg:gap-24 sm:gap-20 max-h-[200px]">
           <div className='col-span-3'>
             <ReportTable
