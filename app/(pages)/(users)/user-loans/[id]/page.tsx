@@ -2,14 +2,14 @@
 import LoaderSpinner from '@/app/components/loading/LoaderSpinner';
 import ArrowBack from '@/app/components/navigation/ArrowBack';
 import NoData from '@/app/components/navigation/NoData';
+import GenerateButton from '@/app/components/reports/GenerateButton';
 import ReportTable from '@/app/components/reports/ReportTable';
-import ReportPage from '@/app/components/reports/ReportTable'
-import { GET_LOANS_BY_BORROWER, GET_USER_BY_ID } from '@/app/constants/queries/queries';
+import FilterBox from '@/app/components/search/FilterBox';
+import { GET_LOANS_BY_BORROWER, GET_USER_BY_ID, SEARCH_LOANS, SEARCH_USER } from '@/app/constants/queries/queries';
 import { Column } from '@/app/interfaces/column.interface';
 import { ApolloClient, useQuery } from '@apollo/client';
-import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import React from 'react'
+import React, { useState } from 'react'
 
 
 const page = () => {
@@ -21,9 +21,11 @@ const page = () => {
     { columnDef: 'borrowerId', header: 'borrower_id' },
     { columnDef: 'amount', header: 'Loan amount' },
     { columnDef: 'interestRate', header: 'Interest rate'},
-    { columnDef: 'status', header: 'Loan status' },
-    { columnDef: 'actions', header: 'actions' }
+    { columnDef: 'status', header: 'Loan status' }
   ];
+
+  const [filterBy, setFilterBy] = useState<string>('');
+  const [sortBy, setSortBy] = useState<string>('');
 
   const generateReport = async() => {
     const file = await fetch(`${process.env.NEXT_PUBLIC_REST_URL}/api/reports/user-loans/${id}/report?first_name=${user.first_name}&last_name=${user.last_name}&email=${user.email}`).then(
@@ -44,13 +46,21 @@ const page = () => {
   }
 
   const {data, loading, error} = useQuery(GET_LOANS_BY_BORROWER, {
-    variables: {id: id}
+    variables: {id: id, page: 0, size: 20, filterBy, sortBy}
   });
   const loanData = data && data.getLoansByUserId.data;
 
   const fetchUser = useQuery(GET_USER_BY_ID, {
     variables: {id: Number(id)}
   });
+
+  const handleFilter = (event: string) => {
+    setFilterBy(event);
+  };
+
+  const handleSort = (event: string) => {
+    setSortBy(event);
+  }
 
   const user = fetchUser?.data?.getUserById;
 
@@ -72,8 +82,10 @@ const page = () => {
           <ArrowBack/>
           <p>{user.first_name} {user.last_name} - Loans</p>
         </nav>
-        <div className='flex items-center justify-center p-4 rounded-lg bg-altpurple max-w-[200px] mb-2 max-height-[50px]' onClick={generateReport}>
-          <h2 className='text-lg font-bold text-white'>Generate report</h2>
+        <div className='flex gap-2 items-center w-full'>
+          <FilterBox filter={handleFilter} title='Filter by' options={['Status', 'Amount']} value={filterBy}/>
+          <FilterBox filter={handleSort} title='Sort by' options={['ASC', 'DESC']} value={sortBy}/>
+          <GenerateButton onClick={generateReport}/>
         </div>
         <div className="w-full h-full sm:grid sm:grid-cols-3 flex flex-col gap-10 lg:gap-24 sm:gap-20 max-h-[200px]">
           <div className='col-span-3'>

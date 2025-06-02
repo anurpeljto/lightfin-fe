@@ -116,8 +116,8 @@ export const GET_LATEST_RECEIPTS = gql`
 `
 
 export const GET_LOANS_BY_BORROWER = gql `
-    query GetLoansByUserId($id: ID!, $page: Int, $size: Int){
-        getLoansByUserId(id: $id, page: $page, size: $size) {
+    query GetLoansByUserId($id: ID!, $page: Int, $size: Int, $filterBy: String, $sortBy: String){
+        getLoansByUserId(id: $id, page: $page, size: $size, filterBy: $filterBy, sortBy: $sortBy) {
             data{
                 id,
                 borrowerId,
@@ -145,6 +145,29 @@ export const GET_USERS = gql `
             first_name,
             last_name,
             email
+        }
+    }
+`
+
+export const SEARCH_USER = gql `
+    query SearchUsers($searchTerm: String, $page: Int, $size: Int){
+        searchUsers(searchTerm: $searchTerm, page: $page, size: $size){
+            id,
+            first_name,
+            last_name,
+            email
+        }
+    }
+`
+
+export const SEARCH_LOANS = gql `
+    query SearchLoans($page: Int, $size: Int, $filterBy: String, $sortBy: String){
+        searchLoans(page: $page, size: $size, filterBy: $filterBy, sortBy: $sortBy){
+            id,
+            borrower_id,
+            status,
+            amount,
+            interestRate
         }
     }
 `
