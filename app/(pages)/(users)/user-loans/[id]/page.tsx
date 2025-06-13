@@ -23,7 +23,7 @@ const page = () => {
     { columnDef: 'interestRate', header: 'Interest rate'},
     { columnDef: 'status', header: 'Loan status' }
   ];
-
+  const [page, setPage] = useState(0);
   const [filterBy, setFilterBy] = useState<string>('');
   const [sortBy, setSortBy] = useState<string>('');
 
@@ -46,7 +46,7 @@ const page = () => {
   }
 
   const {data, loading, error} = useQuery(GET_LOANS_BY_BORROWER, {
-    variables: {id: id, page: 0, size: 20, filterBy, sortBy}
+    variables: {id: id, page: page, size: 20, filterBy, sortBy}
   });
   const loanData = data && data.getLoansByUserId.data;
 
@@ -92,6 +92,10 @@ const page = () => {
             <ReportTable
               columns={columns}
               columnData={loanData}
+              page={data.page}
+              size={data.size}
+              totalPages={data.totalPages}
+              setPage={setPage}
             />
           </div>
         </div>

@@ -188,7 +188,9 @@ export const GET_SUBSIDIES_USER = gql `
                 status
             },
             totalPages,
-            totalElements
+            totalElements,
+            numberOfElements,
+            size
         }
     }
 `
@@ -200,6 +202,50 @@ export const APPROVE_SUBSIDY = gql `
             recipientId,
             status,
             amount
+        }
+    }
+`
+
+export const GET_SUBSIDIES = gql `
+    query ListSubsidies($page: Int, $size: Int){
+        listSubsidies(page: $page, size: $size){
+            content {
+                id,
+                recipientId,
+                amount,
+                grant {
+                    id,
+                    name
+                },
+                approvalDate,
+                validUntil,
+                status,
+                grant {
+                    id,
+                    name,
+                    grantingAuthority,
+                    description
+                }
+            },
+            totalPages,
+            totalElements,
+            numberOfElements
+        }
+    }
+`
+
+export const GET_PENDING_SUBSIDIES = gql `
+    query GetPendingSubsidies($page: Int, $size: Int){
+        getPendingSubsidies(page: $page, size: $size){
+            totalElements
+        }
+    }
+`
+
+export const GET_WEEKLY_SUBSIDIES = gql `
+    query GetWeeklySubsidies($page: Int, $size: Int){
+        getWeeklySubsidies(page: $page, size: $size){
+            totalElements
         }
     }
 `

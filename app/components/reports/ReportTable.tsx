@@ -1,22 +1,36 @@
+'use client';
 import { Column } from '@/app/interfaces/column.interface'
 import React from 'react'
 import LinkButton from '../buttons/LinkButton';
 import { useMutation } from '@apollo/client';
-import { APPROVE_SUBSIDY } from '@/app/constants/queries/queries';
+import { APPROVE_SUBSIDY, GET_SUBSIDIES } from '@/app/constants/queries/queries';
 
 interface ReportTableProps {
     columns: Column[];
     columnData: any;
+    refetch?: () => void;
+    page: number;
+    size: number;
+    totalPages: number;
+    setPage: (newPage: number) => void;
 }
 
 const ReportTable = (props: ReportTableProps) => {
   const {columns, columnData} = props;
-
-  const [approveSubsidy] = useMutation(APPROVE_SUBSIDY);
+  console.log(props);
+  const [approveSubsidy] = useMutation(APPROVE_SUBSIDY, {
+    refetchQueries: [{
+      query: GET_SUBSIDIES,
+      variables: {page: props.page, size: props.size}
+    }]
+  });
 
   const handleApproveSubsidy = async(id: number) => {
     try {
       await approveSubsidy({variables: {id}});
+      if(props.refetch){
+        await props.refetch();
+      }
     } catch (error) {
       console.error(error);
     }
@@ -68,6 +82,27 @@ const ReportTable = (props: ReportTableProps) => {
           ))}
         </tbody>
       </table>
+      <div className="mt-4 flex justify-center items-center gap-4">
+        <button
+          onClick={() => props.page > 0 && props.setPage(props.page - 1)}
+          disabled={props.page === 0}
+          className={`px-3 py-1 border rounded ${props.page === 0 ? 'bg-gray-200 text-gray-500' : 'bg-white hover:bg-gray-100'}`}
+        >
+          Previous
+        </button>
+
+        <span className="text-sm">
+          Page {props.page + 1} of {props.totalPages}
+        </span>
+
+        <button
+          onClick={() => props.page < props.totalPages - 1 && props.setPage(props.page + 1)}
+          disabled={props.page === props.totalPages - 1}
+          className={`px-3 py-1 border rounded ${props.page === props.totalPages - 1 ? 'bg-gray-200 text-gray-500' : 'bg-white hover:bg-gray-100'}`}
+        >
+          Next
+        </button>
+      </div>
 
         <div className="sm:hidden block w-full space-y-4 text-sm">
         {columnData.map((row: any, index: number) => (

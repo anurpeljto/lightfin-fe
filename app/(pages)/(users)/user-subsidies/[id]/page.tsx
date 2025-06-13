@@ -17,6 +17,7 @@ const page = () => {
   const {id} = useParams();
   const [filterBy, setFilterBy] = useState<string>('');
   const [sortBy, setSortBy] = useState<string>('');
+  const [page, setPage] = useState(0);
 
   const columns: Column[] = [
     { columnDef: 'id', header: 'id'},
@@ -35,9 +36,9 @@ const page = () => {
   const user = fetchUser?.data?.getUserById;
 
   const {data, loading, error} = useQuery(GET_SUBSIDIES_USER, {
-      variables: {id: id, page: 0, size: 20, filterBy, sortBy}
+      variables: {id: id, page: page, size: 20, filterBy, sortBy}
     });
-  const subsidyData = data && data.getSubsidiesByUserId.content;
+  const subsidyData = data && data.getSubsidiesByUserId;
 
   const handleFilter = (event: string) => {
     setFilterBy(event);
@@ -73,10 +74,9 @@ const page = () => {
 
   if (error || fetchUser.error) return <p>Error loading loans: {error?.message}</p>;
 
-  if(subsidyData.length == 0){
+  if(subsidyData.content.length == 0){
     return <NoData/>
   }
-
   return (
     <div className="w-full h-full grid grid-rows-[0.15fr_0.05fr_0.90fr] md:p-10 p-4">
         <nav className="text-4xl font-bold text-primary p-0 m-0 flex items-center gap-4 pb-10">
@@ -92,7 +92,11 @@ const page = () => {
           <div className='col-span-3'>
             <ReportTable
               columns={columns}
-              columnData={subsidyData}
+              columnData={subsidyData.content}
+              page={page}
+              setPage={setPage}
+              totalPages={subsidyData.totalPages}
+              size={subsidyData.size}
             />
           </div>
         </div>
