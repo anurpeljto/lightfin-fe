@@ -1,3 +1,5 @@
+'use client';
+
 import ReportTable from '@/app/components/reports/ReportTable'
 import { Column } from '@/app/interfaces/column.interface'
 import React from 'react'

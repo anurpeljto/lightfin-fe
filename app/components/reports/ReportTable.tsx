@@ -1,6 +1,8 @@
 import { Column } from '@/app/interfaces/column.interface'
 import React from 'react'
 import LinkButton from '../buttons/LinkButton';
+import { useMutation } from '@apollo/client';
+import { APPROVE_SUBSIDY } from '@/app/constants/queries/queries';
 
 interface ReportTableProps {
     columns: Column[];
@@ -9,6 +11,17 @@ interface ReportTableProps {
 
 const ReportTable = (props: ReportTableProps) => {
   const {columns, columnData} = props;
+
+  const [approveSubsidy] = useMutation(APPROVE_SUBSIDY);
+
+  const handleApproveSubsidy = async(id: number) => {
+    try {
+      await approveSubsidy({variables: {id}});
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div className="min-w-full min-h-full">
       {/* Desktop Table */}
@@ -37,10 +50,15 @@ const ReportTable = (props: ReportTableProps) => {
                       </div>
                     ) : col.columnDef === 'subsidy_actions' ? (
                       <div className="flex gap-2">
-                        <button className="text-blue-600 hover:underline">Approve</button>
+                        <button onClick={() => handleApproveSubsidy(item.id)} className="text-blue-600 hover:underline">Approve</button>
                         <button className="text-red-600 hover:underline">Reject</button>
                       </div>
-                    ) : (
+                    ) : col.columnDef === 'grant' && item.grant ? (
+                      item.grant.name
+                    ): item[col.columnDef] == null ? (
+                      '-'
+                    ):
+                    (
                       String(item[col.columnDef])
                     )}
                   </td>

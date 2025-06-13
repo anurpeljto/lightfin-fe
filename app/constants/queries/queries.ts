@@ -171,3 +171,35 @@ export const SEARCH_LOANS = gql `
         }
     }
 `
+
+export const GET_SUBSIDIES_USER = gql `
+    query GetSubsidiesByUserId($id: ID!, $page: Int, $size: Int, $filterBy: String, $sortBy: String){
+        getSubsidiesByUserId(id: $id, page: $page, size: $size, filterBy: $filterBy, sortBy: $sortBy){
+            content {
+                id,
+                recipientId,
+                amount,
+                grant {
+                    id,
+                    name
+                },
+                approvalDate,
+                validUntil,
+                status
+            },
+            totalPages,
+            totalElements
+        }
+    }
+`
+
+export const APPROVE_SUBSIDY = gql `
+    mutation ApproveSubsidy($id: ID!){
+        approveSubsidy(id: $id){
+            id,
+            recipientId,
+            status,
+            amount
+        }
+    }
+`
