@@ -249,3 +249,21 @@ export const GET_WEEKLY_SUBSIDIES = gql `
         }
     }
 `
+
+export const GET_TODAY_TRANSACTIONS_COUNT = gql `
+    query GetTodaysTransactionsCount{
+        getTodaysTransactionsCount
+    }
+`
+
+export const GET_WEEK_TRANSACTIONS_COUNT = gql `
+    query GetWeeklyTransactionsCount{
+        getWeeklyTransactionsCount
+    }
+`
+
+export const GET_MONTH_TRANSACTIONS_COUNT = gql `
+    query GetMonthlyTransactionsCount{
+        getMonthlyTransactionsCount
+    }
+`
