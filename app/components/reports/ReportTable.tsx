@@ -3,7 +3,7 @@ import { Column } from '@/app/interfaces/column.interface'
 import React from 'react'
 import LinkButton from '../buttons/LinkButton';
 import { useMutation } from '@apollo/client';
-import { APPROVE_SUBSIDY, GET_SUBSIDIES } from '@/app/constants/queries/queries';
+import { APPROVE_SUBSIDY, GET_SUBSIDIES, REJECT_SUBSIDY } from '@/app/constants/queries/queries';
 
 interface ReportTableProps {
     columns: Column[];
@@ -25,6 +25,13 @@ const ReportTable = (props: ReportTableProps) => {
     }]
   });
 
+  const [rejectSubsidy] = useMutation(REJECT_SUBSIDY, {
+    refetchQueries: [{
+      query: GET_SUBSIDIES,
+      variables: {page: props.page, size: props.size}
+    }]
+  });
+
   const handleApproveSubsidy = async(id: number) => {
     try {
       await approveSubsidy({variables: {id}});
@@ -34,6 +41,35 @@ const ReportTable = (props: ReportTableProps) => {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  const handleRejectSubsidy = async(id: number) => {
+    try {
+      await rejectSubsidy({variables: {id}});
+      if(props.refetch){
+        await props.refetch();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const generateReceipt = async(id: number) => {
+    const file = await fetch(`${process.env.NEXT_PUBLIC_REST_URL}/api/reports/receipts/${id}/generate`).then(
+      response => {
+        if(!response.ok) throw new Error("Network response was not ok");
+          return response.blob();
+      }
+    ).then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `receipt_${id}_report.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    })
   }
 
   return (
@@ -55,6 +91,14 @@ const ReportTable = (props: ReportTableProps) => {
                   return null;
                 }
 
+                if(col.isTimeStamp){
+                  return (
+                    <td key={col.columnDef} className='px-4 py-2'>
+                      {new Date(item[col.columnDef]).toLocaleDateString('sr-LATN-sr')}
+                    </td>
+                  )
+                }
+
                 return (
                   <td key={col.columnDef} className="px-4 py-2">
                     {col.columnDef === 'actions' ? (
@@ -65,9 +109,14 @@ const ReportTable = (props: ReportTableProps) => {
                     ) : col.columnDef === 'subsidy_actions' ? (
                       <div className="flex gap-2">
                         <button onClick={() => handleApproveSubsidy(item.id)} className="text-blue-600 hover:underline">Approve</button>
-                        <button className="text-red-600 hover:underline">Reject</button>
+                        <button onClick={() => handleRejectSubsidy(item.id)} className="text-red-600 hover:underline">Reject</button>
                       </div>
-                    ) : col.columnDef === 'grant' && item.grant ? (
+                    ) : col.columnDef === 'receiptActions' ? (
+                      <div className="flex gap-2">
+                          <button onClick={() => generateReceipt(item.id)} className="text-blue-600 hover:underline">Generate receipt</button>
+                        </div>
+                    ):
+                    col.columnDef === 'grant' && item.grant ? (
                       item.grant.name
                     ): item[col.columnDef] == null ? (
                       '-'

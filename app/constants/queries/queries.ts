@@ -1,75 +1,82 @@
 import { gql } from "@apollo/client"
 
 export const fiscalizedThisWeekQuery = `
-                        query {
-                        getFiscalizedThisWeek{
-                            data {
-                                id,
-                                total,
-                                items {
-                                    id,
-                                    name,
-                                    unitPrice,
-                                    quantity,
-                                    totalPrice
-                                },
-                                fiscalCode,
-                                signature,
-                                timestamp,
-                                status,
-                                paymentType,
-                                taxAmount
-                            },
-                            count
-                        }
-                        }`
-
-export const pendingThisWeekQuery = `{
-    getPendingThisWeek{
-        data {
-            id,
-            total,
-            items {
-                id,
-                name,
-                unitPrice,
-                quantity,
-                totalPrice
-            },
-            fiscalCode,
-            signature,
-            timestamp,
-            status,
-            paymentType,
-            taxAmount
-        },
-        count
+    query {
+        getFiscalizedThisWeek(page: 0, size: 20, filterBy: "id", sortBy: "ASC") {
+            content {
+                id
+                total
+                items {
+                    id
+                    name
+                    unitPrice
+                    quantity
+                    totalPrice
+                }
+                fiscalCode
+                signature
+                timestamp
+                status
+                paymentType
+                taxAmount
+            }
+            totalElements
+            totalPages
+        }
     }
-}`
+`;
 
-export const cancelledThisWeekQuery = ` {
-    getCancelledThisWeek{
-        data {
-            id,
-            total,
-            items {
-                id,
-                name,
-                unitPrice,
-                quantity,
-                totalPrice
-            },
-            fiscalCode,
-            signature,
-            timestamp,
-            status,
-            paymentType,
-            taxAmount
-        },
-        count
+export const pendingThisWeekQuery = `
+    query {
+        getPendingThisWeek(page: 0) {
+            content {
+                id
+                total
+                items {
+                    id
+                    name
+                    unitPrice
+                    quantity
+                    totalPrice
+                }
+                fiscalCode
+                signature
+                timestamp
+                status
+                paymentType
+                taxAmount
+            }
+            totalElements
+        }
     }
-}
-`
+`;
+
+
+export const cancelledThisWeekQuery = `
+    query {
+        getCancelledThisWeek {
+            data {
+                id
+                total
+                items {
+                    id
+                    name
+                    unitPrice
+                    quantity
+                    totalPrice
+                }
+                fiscalCode
+                signature
+                timestamp
+                status
+                paymentType
+                taxAmount
+            }
+            count
+        }
+    }
+`;
+
 
 export const todayTransactionsQuery = `{
     getTodaysTransactions{
@@ -111,6 +118,31 @@ export const GET_LATEST_RECEIPTS = gql`
             status,
             paymentType,
             taxAmount
+        }
+    }
+`
+
+export const LIST_RECEIPTS = gql `
+    query ListReceipts($page: Int, $size: Int, $filterBy: String, $sortBy: String){
+        listReceipts(page: $page, size: $size, filterBy: $filterBy, sortBy: $sortBy){
+            content {
+            id,
+            total,
+            paymentType,
+            signature,
+            timestamp,
+            fiscalCode,
+            taxAmount,
+            status,
+            items {
+                id,
+                name,
+                unitPrice,
+                quantity,
+            }
+            },
+            totalPages,
+            totalElements
         }
     }
 `
@@ -206,6 +238,17 @@ export const APPROVE_SUBSIDY = gql `
     }
 `
 
+export const REJECT_SUBSIDY = gql `
+    mutation RejectSubsidy($id: ID!){
+        rejectSubsidy(id: $id){
+            id,
+            recipientId,
+            status,
+            amount
+        }
+    }
+`
+
 export const GET_SUBSIDIES = gql `
     query ListSubsidies($page: Int, $size: Int){
         listSubsidies(page: $page, size: $size){
@@ -265,5 +308,11 @@ export const GET_WEEK_TRANSACTIONS_COUNT = gql `
 export const GET_MONTH_TRANSACTIONS_COUNT = gql `
     query GetMonthlyTransactionsCount{
         getMonthlyTransactionsCount
+    }
+`
+
+export const GET_AVG_RECEIPTS = gql `
+    query GetAverageReceiptsPerDay{
+        getAverageReceiptsPerDay
     }
 `

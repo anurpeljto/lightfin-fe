@@ -10,7 +10,7 @@ const SideMenu = () => {
   return (
     <div className='m-0 border-r-1 border-primary grid grid-rows-[0.15fr_0.50fr_0.355fr] items-center justify-center h-full w-full'>
         <div className='p-4'>
-            <h1>LIGHTFIN LOGO</h1>
+            <Image src="/logo.png" height={300} width={300} alt='Lightfin logo' className='object-contain'/>
         </div>
 
         <nav className='flex flex-col gap-10'>

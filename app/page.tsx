@@ -37,7 +37,7 @@ export default function Home() {
     try{
       const json = await query.query(fiscalizedThisWeekQuery);
       if(json.data?.getFiscalizedThisWeek){
-        setFiscalizedWeeklyData(json.data.getFiscalizedThisWeek.count);
+        setFiscalizedWeeklyData(json.data.getFiscalizedThisWeek.totalElements);
       }
     } catch(error){
       console.error('Error!!!, ', error)
@@ -51,7 +51,7 @@ export default function Home() {
     try{
       const json = await query.query(pendingThisWeekQuery);
       if(json.data?.getPendingThisWeek){
-        setPendingWeeklyData(json.data.getPendingThisWeek.count);
+        setPendingWeeklyData(json.data.getPendingThisWeek.totalElements);
       }
     } catch(error){
       console.error('Error!!!, ', error)
@@ -65,7 +65,7 @@ export default function Home() {
     try{
       const json = await query.query(cancelledThisWeekQuery);
       if(json.data?.getCancelledThisWeek){
-        setCancelledWeeklyData(json.data.getCancelledThisWeek.count);
+        setCancelledWeeklyData(json.data.getCancelledThisWeek.totalElements);
       }
     } catch(error){
       console.error('Error!!!, ', error)
