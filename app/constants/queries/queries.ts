@@ -316,3 +316,43 @@ export const GET_AVG_RECEIPTS = gql `
         getAverageReceiptsPerDay
     }
 `
+
+export const GET_LOANS = gql `
+    query GetLoans($page: Int, $size: Int, $filterBy: String, $sortBy: String){
+        getLoans(page: $page, size: $size, filterBy: $filterBy, sortBy: $sortBy){
+            loans {
+                id, 
+                borrowerId,
+                amount,
+                status,
+                interestRate,
+                timestamp
+            },
+            totalPages,
+            totalElements
+        }
+    }
+`
+
+export const GET_LOANS_THIS_WEEK = gql`
+    query GetLoansThisWeek {
+        getLoansThisWeek
+    }
+`
+export const GET_PENDING_LOANS = gql`
+    query GetPendingLoans {
+        getPendingLoans
+    }
+`
+
+export const GET_LOAN_AVG = gql`
+    query GetLoanAverageAmount {
+        getLoanAverageAmount
+    }
+`
+
+export const GET_TOTAL_LOAN = gql `
+    query GetTotalLoans{
+        getTotalLoans
+    }
+`
