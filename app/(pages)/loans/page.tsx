@@ -16,7 +16,7 @@ const page = () => {
         {columnDef: 'id', header: 'id'},
         {columnDef: 'borrowerId', header: 'Borrower ID'},
         { columnDef: 'status', header: 'status'},
-        { columnDef: 'subsidy_actions', header: 'Loan actions'},
+        { columnDef: 'loan_actions', header: 'Loan actions'},
     ];
 
     const {data: loans, loading: loansLoading, error: loansError} = useQuery(GET_LOANS, {

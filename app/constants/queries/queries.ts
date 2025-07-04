@@ -356,3 +356,21 @@ export const GET_TOTAL_LOAN = gql `
         getTotalLoans
     }
 `
+
+export const APPROVE_LOAN = gql `
+    mutation ApproveLoan($id: ID){
+        approveLoan(id: $id){
+            id,
+            status
+        }
+    }
+`
+
+export const REJECT_LOAN = gql `
+    mutation RejectLoan($id: ID){
+        rejectLoan(id: $id){
+            id,
+            status
+        }
+    }
+`

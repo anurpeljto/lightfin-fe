@@ -3,7 +3,7 @@ import { Column } from '@/app/interfaces/column.interface'
 import React from 'react'
 import LinkButton from '../buttons/LinkButton';
 import { useMutation } from '@apollo/client';
-import { APPROVE_SUBSIDY, GET_SUBSIDIES, REJECT_SUBSIDY } from '@/app/constants/queries/queries';
+import { APPROVE_LOAN, APPROVE_SUBSIDY, GET_LOANS, GET_SUBSIDIES, REJECT_LOAN, REJECT_SUBSIDY } from '@/app/constants/queries/queries';
 
 interface ReportTableProps {
     columns: Column[];
@@ -17,7 +17,6 @@ interface ReportTableProps {
 
 const ReportTable = (props: ReportTableProps) => {
   const {columns, columnData} = props;
-  console.log(props);
   const [approveSubsidy] = useMutation(APPROVE_SUBSIDY, {
     refetchQueries: [{
       query: GET_SUBSIDIES,
@@ -29,6 +28,20 @@ const ReportTable = (props: ReportTableProps) => {
     refetchQueries: [{
       query: GET_SUBSIDIES,
       variables: {page: props.page, size: props.size}
+    }]
+  });
+
+  const [approveLoan] = useMutation(APPROVE_LOAN, {
+    refetchQueries: [{
+      query: GET_LOANS,
+      variables: {page: props.page, size: props.page}
+    }]
+  });
+
+  const [rejectLoan] = useMutation(REJECT_LOAN, {
+    refetchQueries: [{
+      query: GET_LOANS,
+      variables: {page: props.page, size: props.page}
     }]
   });
 
@@ -51,6 +64,28 @@ const ReportTable = (props: ReportTableProps) => {
       }
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  const handleApproveLoan = async(id: number) => {
+    try {
+      await approveLoan({variables: {id}});
+      if(props.refetch){
+        await props.refetch();
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  const handleRejectLoan = async(id: number) => {
+    try {
+      await rejectLoan({variables: {id}});
+      if(props.refetch){
+        await props.refetch();
+      }
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -87,7 +122,7 @@ const ReportTable = (props: ReportTableProps) => {
           {columnData.map((item: any) => (
             <tr key={item.id} className="border-b hover:bg-gray-50">
               {columns.map((col: Column) => {
-                if (col.columnDef === 'subsidy_actions' && item.status !== 'PENDING') {
+                if (col.columnDef === 'subsidy_actions' || col.columnDef === "loan_actions" && item.status !== 'PENDING') {
                   return null;
                 }
 
@@ -115,7 +150,12 @@ const ReportTable = (props: ReportTableProps) => {
                       <div className="flex gap-2">
                           <button onClick={() => generateReceipt(item.id)} className="text-blue-600 hover:underline">Generate receipt</button>
                         </div>
-                    ):
+                    ): col.columnDef === 'loan_actions' ? (
+                      <div className="flex gap-2">
+                        <button onClick={() => handleApproveLoan(item.id)} className="text-blue-600 hover:underline">Approve</button>
+                        <button onClick={() => handleRejectLoan(item.id)} className="text-red-600 hover:underline">Reject</button>
+                      </div>
+                    ) :
                     col.columnDef === 'grant' && item.grant ? (
                       item.grant.name
                     ): item[col.columnDef] == null ? (
