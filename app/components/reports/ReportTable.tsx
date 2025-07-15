@@ -17,6 +17,7 @@ interface ReportTableProps {
 
 const ReportTable = (props: ReportTableProps) => {
   const {columns, columnData} = props;
+  const token = localStorage.getItem('token');
   const [approveSubsidy] = useMutation(APPROVE_SUBSIDY, {
     refetchQueries: [{
       query: GET_SUBSIDIES,
@@ -90,7 +91,11 @@ const ReportTable = (props: ReportTableProps) => {
   }
 
   const generateReceipt = async(id: number) => {
-    const file = await fetch(`${process.env.NEXT_PUBLIC_REST_URL}/api/reports/receipts/${id}/generate`).then(
+    const file = await fetch(`${process.env.NEXT_PUBLIC_REST_URL}/api/reports/receipts/${id}/generate`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then(
       response => {
         if(!response.ok) throw new Error("Network response was not ok");
           return response.blob();
@@ -122,10 +127,14 @@ const ReportTable = (props: ReportTableProps) => {
           {columnData.map((item: any) => (
             <tr key={item.id} className="border-b hover:bg-gray-50">
               {columns.map((col: Column) => {
-                if (col.columnDef === 'subsidy_actions' || col.columnDef === "loan_actions" && item.status !== 'PENDING') {
+                if (col.columnDef === 'subsidy_actions' && item.status !== 'PENDING') {
                   return null;
                 }
 
+                if ( col.columnDef === 'loan_actions' && item.status !== 'PENDING'){
+                  return null;
+                }
+                
                 if(col.isTimeStamp){
                   return (
                     <td key={col.columnDef} className='px-4 py-2'>

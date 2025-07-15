@@ -1,103 +1,104 @@
 import { gql } from "@apollo/client"
 
-export const fiscalizedThisWeekQuery = `
-    query {
-        getFiscalizedThisWeek(page: 0, size: 20, filterBy: "id", sortBy: "ASC") {
-            content {
-                id
-                total
-                items {
-                    id
-                    name
-                    unitPrice
-                    quantity
-                    totalPrice
-                }
-                fiscalCode
-                signature
-                timestamp
-                status
-                paymentType
-                taxAmount
-            }
-            totalElements
-            totalPages
+export const fiscalizedThisWeekQuery = gql`
+  query {
+    getFiscalizedThisWeek(page: 0, size: 20, filterBy: "id", sortBy: "ASC") {
+      content {
+        id
+        total
+        items {
+          id
+          name
+          unitPrice
+          quantity
+          totalPrice
         }
+        fiscalCode
+        signature
+        timestamp
+        status
+        paymentType
+        taxAmount
+      }
+      totalElements
+      totalPages
     }
+  }
 `;
 
-export const pendingThisWeekQuery = `
-    query {
-        getPendingThisWeek(page: 0) {
-            content {
-                id
-                total
-                items {
-                    id
-                    name
-                    unitPrice
-                    quantity
-                    totalPrice
-                }
-                fiscalCode
-                signature
-                timestamp
-                status
-                paymentType
-                taxAmount
-            }
-            totalElements
+export const pendingThisWeekQuery = gql`
+  query {
+    getPendingThisWeek(page: 0) {
+      content {
+        id
+        total
+        items {
+          id
+          name
+          unitPrice
+          quantity
+          totalPrice
         }
+        fiscalCode
+        signature
+        timestamp
+        status
+        paymentType
+        taxAmount
+      }
+      totalElements
     }
+  }
 `;
 
-
-export const cancelledThisWeekQuery = `
-    query {
-        getCancelledThisWeek {
-            data {
-                id
-                total
-                items {
-                    id
-                    name
-                    unitPrice
-                    quantity
-                    totalPrice
-                }
-                fiscalCode
-                signature
-                timestamp
-                status
-                paymentType
-                taxAmount
-            }
-            count
-        }
-    }
-`;
-
-
-export const todayTransactionsQuery = `{
-    getTodaysTransactions{
-        todayDTOList {
-            status,
-            count
-        }
-    }
-}
-`
-
-export const weeklyByTypeQuery = `{
-    getWeeklyByType{
-        weeklyByType {
+export const cancelledThisWeekQuery = gql`
+  query {
+    getCancelledThisWeek {
+      content {
             id,
-            label,
-            value,
-            color
-        }
+            total,
+            items {
+                id,
+                name,
+                unitPrice,
+                quantity,
+                totalPrice
+            },
+            fiscalCode,
+            signature,
+            timestamp,
+            status,
+            paymentType,
+            taxAmount
+        },
+        totalElements
     }
-}`
+  }
+`;
+
+export const todayTransactionsQuery = gql`
+  query {
+    getTodaysTransactions {
+      todayDTOList {
+        status
+        count
+      }
+    }
+  }
+`;
+
+export const weeklyByTypeQuery = gql`
+  query {
+    getWeeklyByType {
+      weeklyByType {
+        id
+        label
+        value
+        color
+      }
+    }
+  }
+`;
 
 export const GET_LATEST_RECEIPTS = gql`
     query getLatestReceipts{

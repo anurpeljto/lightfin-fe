@@ -26,9 +26,17 @@ const page = () => {
   const [page, setPage] = useState(0);
   const [filterBy, setFilterBy] = useState<string>('');
   const [sortBy, setSortBy] = useState<string>('');
+  const token = localStorage.getItem('token');
 
   const generateReport = async() => {
-    const file = await fetch(`${process.env.NEXT_PUBLIC_REST_URL}/api/reports/user-loans/${id}/report?first_name=${user.first_name}&last_name=${user.last_name}&email=${user.email}`).then(
+    if(!token){
+      return;
+    }
+    const file = await fetch(`${process.env.NEXT_PUBLIC_REST_URL}/api/reports/user-loans/${id}/report?first_name=${user.first_name}&last_name=${user.last_name}&email=${user.email}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then(
       response => {
         if(!response.ok) throw new Error("Network response was not ok");
           return response.blob();

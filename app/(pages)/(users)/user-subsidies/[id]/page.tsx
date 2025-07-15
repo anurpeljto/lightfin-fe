@@ -18,6 +18,7 @@ const page = () => {
   const [filterBy, setFilterBy] = useState<string>('');
   const [sortBy, setSortBy] = useState<string>('');
   const [page, setPage] = useState(0);
+  const token = localStorage.getItem('token');
 
   const columns: Column[] = [
     { columnDef: 'id', header: 'id'},
@@ -49,7 +50,11 @@ const page = () => {
   }
 
   const generateReport = async() => {
-    const file = await fetch(`${process.env.NEXT_PUBLIC_REST_URL}/api/reports/user-subsidies/${id}/report?first_name=${user.first_name}&last_name=${user.last_name}&email=${user.email}`).then(
+    const file = await fetch(`${process.env.NEXT_PUBLIC_REST_URL}/api/reports/user-subsidies/${id}/report?first_name=${user.first_name}&last_name=${user.last_name}&email=${user.email}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then(
       response => {
         if(!response.ok) throw new Error("Network response was not ok");
           return response.blob();
